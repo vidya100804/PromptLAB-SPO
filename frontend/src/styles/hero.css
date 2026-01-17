@@ -1,0 +1,24 @@
+/* Subtle emphasis for Prompt Optimization */
+.glow-text {
+  font-weight: 900;
+  color: #0ea5e9;
+  text-shadow: 0 0 6px rgba(14, 165, 233, 0.25);
+}
+
+/* Gentle breathing animation */
+.animated-text {
+  display: inline-block;
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 4px rgba(14, 165, 233, 0.18);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(14, 165, 233, 0.35);
+  }
+  100% {
+    text-shadow: 0 0 4px rgba(14, 165, 233, 0.18);
+  }
+}

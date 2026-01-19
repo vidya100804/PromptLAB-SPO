@@ -13,9 +13,9 @@ export default async function handler(req, res) {
     }
 
     const result = await runSPO(task, prompt);
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (err) {
-    console.error("SPO Error:", err);
-    res.status(500).json({ error: "SPO failed" });
+    console.error("SPO API ERROR:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

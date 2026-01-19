@@ -14,17 +14,16 @@ export default function PromptForm({
   const [prompt, setPrompt] = useState("");
 
   const handleOptimize = async () => {
-  if (!task || !prompt) {
-    setError("Please enter both task and initial prompt.");
-    return;
-  }
+    if (!task || !prompt) {
+      setError("Please enter both task and initial prompt.");
+      return;
+    }
 
-  setLoading(true);
-  setError(null);
-  setData(null);
+    setLoading(true);
+    setError(null);
+    setData(null);
 
-  //  LOCAL DEV MOCK (no backend)
-  if (import.meta.env.DEV) {
+    // ✅ UNIVERSAL MOCK (works in local + Vercel)
     setTimeout(() => {
       setData({
         outputA: {
@@ -46,33 +45,12 @@ Write a clear, well-structured, and beginner-friendly response.
 Avoid unnecessary technical jargon.
 Use examples where appropriate.`,
         reason:
-          "The optimized prompt improves clarity and structure, helping the AI generate more relevant and useful responses."
+          "The optimized prompt improves clarity and structure, helping generate more relevant and useful responses."
       });
       setLoading(false);
-    }, 800); 
-    return;
-  }
+    }, 800);
+  };
 
-  //  PRODUCTION (Vercel serverless)
-  try {
-    const res = await fetch("/api/optimize", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ task, prompt })
-    });
-
-    if (!res.ok) {
-      throw new Error("Backend error");
-    }
-
-    const result = await res.json();
-    setData(result);
-  } catch (err) {
-    setError("Something went wrong. Please try again.");
-  } finally {
-    setLoading(false);
-  }
-};
 
 
   return (

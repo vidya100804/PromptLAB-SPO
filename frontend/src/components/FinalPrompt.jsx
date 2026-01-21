@@ -1,5 +1,7 @@
+
 import { useState } from "react";
 import { Copy } from "lucide-react";
+import Confidence from "./Confidence";
 
 export default function FinalPrompt({ data }) {
   const [copied, setCopied] = useState(false);
@@ -9,7 +11,7 @@ export default function FinalPrompt({ data }) {
       await navigator.clipboard.writeText(data.finalPrompt);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
-    } catch (err) {
+    } catch {
       alert("Failed to copy");
     }
   };
@@ -31,16 +33,17 @@ export default function FinalPrompt({ data }) {
             <h4>Optimized Prompt</h4>
             <button
               onClick={handleCopy}
-              title={copied ? "Copied!" : "Copy"}
               className="copy-btn"
               aria-label="Copy optimized prompt"
+              title={copied ? "Copied!" : "Copy"}
             >
               <Copy size={16} />
             </button>
           </div>
 
-         
           <p className="prompt">{data.finalPrompt}</p>
+
+          <Confidence score={data.confidenceScore} />
 
           <div className="reason">
             <strong>Why this is better</strong>

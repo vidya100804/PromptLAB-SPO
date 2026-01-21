@@ -4,6 +4,7 @@ import PromptForm from "./components/PromptForm";
 import OutputComparison from "./components/OutputComparison";
 import FinalPrompt from "./components/FinalPrompt";
 import "./App.css";
+import "./styles/loader.css";
 
 function App() {
   const [data, setData] = useState(null);
@@ -20,8 +21,6 @@ function App() {
         setLoading={setLoading}
         setError={setError}
       />
-
-      {loading && <p className="loading-text">Optimizing prompt…</p>}
 
       {error && <p className="error-text">{error}</p>}
 

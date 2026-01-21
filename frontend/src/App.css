@@ -1,3 +1,19 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+textarea,
+input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+
+
+
 body {
   margin: 0;
   font-family: "Merriweather", serif;
@@ -57,7 +73,7 @@ textarea {
 
 button {
   margin-top: 16px;
-  width: 100%;
+  
   padding: 14px;
   border: none;
   border-radius: 10px;
@@ -119,15 +135,27 @@ button {
 }
 
 /*copy button styling */
-.copy-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #16a34a;
+.copy-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  color: #2e7d32;
+}
+
+.copy-btn:hover {
+  opacity: 0.8;
+}
+
 
 
 
@@ -177,25 +205,37 @@ button {
 
 
 
-
+/*BUTTON STYLING STARTS HERE*/
 
 .optimize-btn {
-  margin-top: 16px;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 10px;
+  margin-top: 20px;
+
+  width: 100%;              /* ⬅️ THIS is the key */
+  min-width: 220px;
+  min-height: 64px;         /* lock height so no jump */
+
+  padding: 0 30px;          /* ⬅️ horizontal padding restored */
+  border-radius: 14px;
+
   background: linear-gradient(to right, #38bdf8, #22c55e);
   color: white;
-  font-size: 16px;
+
+  font-size: 18px;
   font-weight: 600;
+
   cursor: pointer;
 
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
+
+  box-sizing: border-box;   /* safety */
 }
+
+
+
+
 
 /* Sparkles icon size */
 .optimize-icon {
@@ -228,3 +268,23 @@ button {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+
+/*BUTTON ENDS HERE*/
+.loader-wrapper {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+
+.optimize-loading {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+

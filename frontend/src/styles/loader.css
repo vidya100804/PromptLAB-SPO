@@ -1,0 +1,62 @@
+.loader {
+  position: relative;          /* REQUIRED */
+  width: 120px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;            /* STOPS BIG BLOB */
+  animation: colorShift 2.5s ease-in-out infinite;
+}
+
+/* gradient color pulse */
+@keyframes colorShift {
+  0% { color: #6fdcff; }
+  50% { color: #6ee7b7; }
+  100% { color: #6fdcff; }
+}
+
+/* keep SVGs small */
+.loader svg {
+  width: 36px;
+  height: 36px;
+}
+
+/* animations */
+.peg-one {
+  position: absolute;
+  animation: flowe-one 1.2s linear infinite;
+}
+
+.peg-two {
+  position: absolute;
+  opacity: 0;
+  animation: flowe-two 1.2s linear infinite;
+  animation-delay: 0.3s;
+}
+
+.peg-three {
+  position: absolute;
+  opacity: 0;
+  animation: flowe-three 1.2s linear infinite;
+  animation-delay: 0.6s;
+}
+
+/* motion keyframes */
+@keyframes flowe-one {
+  0% { transform: scale(0.4) translateY(-40px); opacity: 0; }
+  50% { transform: scale(1) translateY(0); opacity: 1; }
+  100% { transform: scale(0.4) translateY(40px); opacity: 0; }
+}
+
+@keyframes flowe-two {
+  0% { transform: scale(0.4) translate(-30px, -30px); opacity: 0; }
+  50% { transform: scale(1) translate(0, 0); opacity: 1; }
+  100% { transform: scale(0.4) translate(30px, 30px); opacity: 0; }
+}
+
+@keyframes flowe-three {
+  0% { transform: scale(0.4) translate(30px, -30px); opacity: 0; }
+  50% { transform: scale(1) translate(0, 0); opacity: 1; }
+  100% { transform: scale(0.4) translate(-30px, 30px); opacity: 0; }
+}

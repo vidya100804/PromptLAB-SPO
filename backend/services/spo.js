@@ -1,48 +1,106 @@
-/**
- * Self-Supervised Prompt Optimization (Stable, Model-Free)
- * Works for ALL tasks and NEVER outputs math junk
- */
+export async function runSPO(task, initialPrompt, callLLM) {
+  const basePrompt =
+    initialPrompt.trim().split(/\s+/).length <= 2
+      ? task.trim()
+      : initialPrompt.trim();
 
-export async function runSPO(task, initialPrompt) {
-  // Output A: raw prompt
-  const outputA = {
-    prompt: initialPrompt,
-    text: `This response was generated using the original prompt without additional guidance for the task: "${task}".`
-  };
+  let bestPrompt = basePrompt;
+  let wins = 0;
 
-  // Output B: structured improvement
-  const improvedPrompt = `
+  const AXES = [
+    "clarity",
+    "structure",
+    "brevity",
+    "audience"
+  ];
+
+  for (const axis of AXES) {
+
+    // 1️⃣ Axis-specific mutation
+    const candidatePrompt = (await callLLM({
+      system: `
+You are rewriting a PROMPT for an AI.
+
+Optimization axis: ${axis}
+
+Rules:
+- Do NOT answer the task
+- Do NOT include explanations or examples
+- Write instructions only
+- Keep the same task intent
+- Modify the prompt ONLY to improve ${axis}
+- Max 25 words
+
+Return ONLY the rewritten prompt.
+`,
+      user: `
+Task:
 ${task}
 
-Instructions:
-- Be clear and structured
-- Specify the target audience
-- Use simple language where appropriate
-- Include examples or analogies if helpful
-- Avoid unnecessary technical jargon
-  `.trim();
+Current prompt:
+${bestPrompt}
 
-  const outputB = {
-    prompt: improvedPrompt,
-    text: `This response was generated using a more detailed and structured prompt tailored to the task: "${task}".`
-  };
+Rewritten prompt:
+`
+    }))?.trim();
 
-  // Final optimized prompt
-  const finalPrompt = `
+    // 2️⃣ Hard rejection
+    if (
+      !candidatePrompt ||
+      candidatePrompt === bestPrompt ||
+      candidatePrompt.split(/\s+/).length > 25 ||
+      /(:|\n|\d+\.|example|step|code)/i.test(candidatePrompt)
+    ) {
+      continue;
+    }
+
+    // 3️⃣ Output comparison
+    const [outA, outB] = await Promise.all([
+      callLLM({ user: `${task}\n\n${bestPrompt}` }),
+      callLLM({ user: `${task}\n\n${candidatePrompt}` })
+    ]);
+
+    const judge = await callLLM({
+      system: `
+You are judging ANSWERS.
+
+Choose the answer that better satisfies the task.
+Reply ONLY with A or B.
+`,
+      user: `
+Task:
 ${task}
 
-Write a clear and well-structured response.
-Define the audience explicitly.
-Use step-by-step explanation where applicable.
-Include examples or analogies if useful.
-Keep the response concise and easy to understand.
-  `.trim();
+Answer A:
+${outA}
+
+Answer B:
+${outB}
+
+Which is better?
+`
+    });
+
+    if (judge.trim().startsWith("B")) {
+      bestPrompt = candidatePrompt;
+      wins++;
+    }
+  }
 
   return {
-    outputA,
-    outputB,
-    finalPrompt,
+    outputA: {
+      prompt: initialPrompt,
+      text: "Generated using the original prompt."
+    },
+    outputB: {
+      prompt: bestPrompt,
+      text: "Generated using the optimized prompt."
+    },
+    finalPrompt: bestPrompt,
+    confidenceScore: Math.round((wins / AXES.length) * 100),
     reason:
-      "The optimized prompt improves clarity, structure, and guidance, enabling better AI responses without relying on ground-truth labels."
+      wins === 0
+        ? "The base prompt already satisfied all optimization axes."
+        : "The prompt was improved along specific quality dimensions."
   };
 }

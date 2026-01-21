@@ -1,0 +1,20 @@
+.diff-box {
+  padding: 12px;
+  border-radius: 8px;
+  background: #0f172a;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.diff-added {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+.diff-removed {
+  background: rgba(239, 68, 68, 0.25);
+  text-decoration: line-through;
+}
+
+.diff-same {
+  color: #e5e7eb;
+}

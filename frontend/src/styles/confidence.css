@@ -1,0 +1,17 @@
+.confidence-bar {
+  height: 10px;
+  background: #1f2933;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.confidence-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.confidence-text {
+  font-size: 14px;
+  color: #9ca3af;
+}

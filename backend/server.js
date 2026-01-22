@@ -20,7 +20,7 @@ app.listen(3000, () => {
 
 
 // backend/server.js
-app.post("/optimize", async (req, res) => {
+app.post("/api/optimize", async (req, res) => {
   try {
     const { task, prompt } = req.body;
     const result = await runSPO(task, prompt, callLLM);

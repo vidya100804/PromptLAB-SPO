@@ -8,16 +8,10 @@ export default async function handler(req, res) {
 
   try {
     const { task, prompt } = req.body;
-
-    if (!task || !prompt) {
-      return res.status(400).json({ error: "Missing task or prompt" });
-    }
-
     const result = await runSPO(task, prompt, callLLM);
-    return res.status(200).json(result);
-
+    res.status(200).json(result);
   } catch (err) {
-    console.error("SPO API error:", err);
-    return res.status(500).json({ error: "Internal Server Error" });
+    console.error(err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }

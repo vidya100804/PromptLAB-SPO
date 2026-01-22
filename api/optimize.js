@@ -3,15 +3,20 @@ import { callLLM } from "../backend/services/openrouter.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "Method Not Allowed" });
   }
 
   try {
     const { task, prompt } = req.body;
+
+    if (!task || !prompt) {
+      return res.status(400).json({ error: "Missing task or prompt" });
+    }
+
     const result = await runSPO(task, prompt, callLLM);
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Vercel SPO error:", err);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }

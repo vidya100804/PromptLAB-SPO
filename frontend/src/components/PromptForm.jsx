@@ -2,7 +2,7 @@ import { useState } from "react";
 import Loader from "./Loader";
 import { Sparkles } from "lucide-react";
 import "../styles/loader.css";
-import "../app.css";
+
 export default function PromptForm({
   setData,
   loading,
